@@ -38,6 +38,9 @@ export const UploadForm = styled.form`
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 30px;
+    justify-content: space-between;
+
+    
 
     input[type=submit]{
         background-color: #111;

@@ -4,12 +4,12 @@ import * as Photos from './services/photos';
 import { Photo } from './types/Photo';
 import { PhotoItem } from './components/PhotoItem';
 
-const App=() => {
+const App = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const getPhotos = async () => {
       setLoading(true);
       setPhotos(await Photos.getAll());
@@ -23,15 +23,17 @@ const App=() => {
 
     const formData = new FormData(e.currentTarget);
     const file = formData.get('image') as File;
+    const fileName = formData.get('fileName') as string;
+    const description = formData.get('description') as string;
 
-    if(file && file.size > 0){
+    if (file && file.size > 0) {
       setUploading(true);
-      let result = await Photos.sentPhotos(file);
+      let result = await Photos.sentPhotos(file, fileName, description);
       setUploading(false);
-    
-      if (result instanceof Error){
+
+      if (result instanceof Error) {
         alert(`${result.name} - ${result.message}`);
-      }else{
+      } else {
         let newPhotoList = [...photos];
         newPhotoList.push(result);
         setPhotos(newPhotoList);
@@ -52,35 +54,39 @@ const App=() => {
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
           <input type="file" name="image" />
-          <input type="submit" value="Enviar" />
+          <input type="text" name="fileName" />
+          <input type="text" name="description" />
+          <input type="submit" value="Enviar"/>
           {uploading && "Enviando..."}
         </C.UploadForm>
 
         {/*Área de upload*/}
         {loading &&
-        <C.ScreenWarning>
-          <div className='emoji'>🤚</div>
-          <div>Carregando...</div>
+          <C.ScreenWarning>
+            <div className='emoji'>🤚</div>
+            <div>Carregando...</div>
           </C.ScreenWarning>
         }
 
         {!loading && photos.length > 0 &&
-        <C.PhotoList>
-          {photos.map((item, index)=>(
-            <PhotoItem 
-            key={index} 
-            url={item.url} 
-            name={item.name}
-            onDelete={handleDeleteClick}></PhotoItem>
-          ))}
-        </C.PhotoList>
+          <C.PhotoList>
+            {photos.map((item, index) => (
+              <PhotoItem
+                key={index}
+                url={item.url}
+                name={item.name}
+                onDelete={handleDeleteClick}
+              ></PhotoItem>
+            ))}
+          </C.PhotoList>
         }
 
         {!loading && photos.length === 0 &&
-        <C.ScreenWarning>
-          <div className='emoji'>😡</div>
-          <div>Não há produtos cadastradas.</div>
-        </C.ScreenWarning>}
+          <C.ScreenWarning>
+            <div className='emoji'>😡</div>
+            <div>Não há produtos cadastrados.</div>
+          </C.ScreenWarning>
+        }
       </C.Area>
     </C.Container>
   );

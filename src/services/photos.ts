@@ -1,6 +1,6 @@
 import { Photo } from "../types/Photo";
 import { storage } from "../libs/firebase";
-import { ref, listAll, getDownloadURL, uploadBytes, deleteObject } from 'firebase/storage';
+import { ref, listAll, getDownloadURL, uploadBytes, deleteObject, updateMetadata } from 'firebase/storage';
 
 export const getAll= async () => {
     let list: Photo[] = [];
@@ -20,13 +20,21 @@ export const getAll= async () => {
     return list;
 }
 
-export const sentPhotos = async (file: File) => {
+export const sentPhotos = async (file: File, fileName: string, description: string) => {
     if(['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)){
-        let newFile = ref(storage, `images/`);
+        let newFile = ref(storage, `images/${fileName}`);
         let upload = await uploadBytes(newFile, file);
         let photoUrl = await getDownloadURL(upload.ref);
 
-        return { name: upload.ref.name, url: photoUrl } as Photo;
+        const metadata = {
+            customMetadata: {
+                description: description
+            }
+        };
+
+        await updateMetadata(upload.ref, metadata);
+
+        return { name: upload.ref.name, url: photoUrl, description: description } as Photo;
 
     }else{
         return new Error('Tipo de arquivo não permitido.')
