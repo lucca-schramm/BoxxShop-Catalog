@@ -40,7 +40,11 @@ export const UploadForm = styled.form`
     margin-bottom: 30px;
     justify-content: space-between;
 
-    
+    input[type=text]{
+        margin-left: 5px;
+        margin-right: 5px;
+        border-radius: 5px;
+    }
 
     input[type=submit]{
         background-color: #111;
@@ -55,5 +59,10 @@ export const UploadForm = styled.form`
         &:hover{
             opacity: .8;
         }
+
+    select[name="category"] {
+        margin-left: 10px;
+        border-radius: 5px;
+    }
     }
 `;

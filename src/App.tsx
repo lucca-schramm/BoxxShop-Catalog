@@ -9,6 +9,8 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
 
+  const category=["Bundesliga", "LaLiga", "Premier League"];
+
   useEffect(() => {
     const getPhotos = async () => {
       setLoading(true);
@@ -25,10 +27,11 @@ const App = () => {
     const file = formData.get('image') as File;
     const fileName = formData.get('fileName') as string;
     const description = formData.get('description') as string;
+    const category = formData.get('category') as string;
 
     if (file && file.size > 0) {
       setUploading(true);
-      let result = await Photos.sentPhotos(file, fileName, description);
+      let result = await Photos.sentPhotos(file, fileName, description, category);
       setUploading(false);
 
       if (result instanceof Error) {
@@ -56,6 +59,11 @@ const App = () => {
           <input type="file" name="image"/>
           <input type="text" name="fileName" placeholder='Nome'/>
           <input type="text" name="description" placeholder='Descrição'/>
+          <select name="category">
+          {category.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+          </select>
           <input type="submit" value="Enviar"/>
           {uploading && "Enviando..."}
         </C.UploadForm>
@@ -75,6 +83,8 @@ const App = () => {
                 key={index}
                 url={item.url}
                 name={item.name}
+                description={item.description}
+                category={item.category}
                 onDelete={handleDeleteClick}
               ></PhotoItem>
             ))}
