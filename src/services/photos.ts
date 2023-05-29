@@ -1,6 +1,6 @@
 import { Photo } from "../types/Photo";
 import { storage } from "../libs/firebase";
-import { ref, listAll, getDownloadURL, uploadBytes, deleteObject, updateMetadata } from 'firebase/storage';
+import { ref, listAll, getDownloadURL, uploadBytes, deleteObject, updateMetadata, getMetadata } from 'firebase/storage';
 
 export const getAll= async () => {
     let list: Photo[] = [];
@@ -10,17 +10,23 @@ export const getAll= async () => {
 
 
     for(let i in photoList.items){
+        let photoRef = photoList.items[i];
         let photoUrl = await getDownloadURL(photoList.items[i]);
+        let metadata = await getMetadata(photoRef);
+        let description = metadata.customMetadata?.description || "";
+        let category = metadata.customMetadata?.category || "";
         list.push({
             name: photoList.items[i].name,
-            url: photoUrl
+            url: photoUrl,
+            description: description,
+            category: category,
         });
     }
 
     return list;
 }
 
-export const sentPhotos = async (file: File, fileName: string, description: string) => {
+export const sentPhotos = async (file: File, fileName: string, description: string, category: string) => {
     if(['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)){
         let newFile = ref(storage, `images/${fileName}`);
         let upload = await uploadBytes(newFile, file);
@@ -28,7 +34,8 @@ export const sentPhotos = async (file: File, fileName: string, description: stri
 
         const metadata = {
             customMetadata: {
-                description: description
+                description: description,
+                category: category,
             }
         };
 
