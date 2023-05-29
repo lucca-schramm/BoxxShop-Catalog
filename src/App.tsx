@@ -53,9 +53,9 @@ const App = () => {
         <C.Header> Galeria de Produtos BoxxShop </C.Header>
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
-          <input type="file" name="image" />
-          <input type="text" name="fileName" />
-          <input type="text" name="description" />
+          <input type="file" name="image"/>
+          <input type="text" name="fileName" placeholder='Nome'/>
+          <input type="text" name="description" placeholder='Descrição'/>
           <input type="submit" value="Enviar"/>
           {uploading && "Enviando..."}
         </C.UploadForm>
