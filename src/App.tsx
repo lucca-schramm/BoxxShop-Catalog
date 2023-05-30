@@ -8,8 +8,9 @@ const App = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [filter, setFilter] = useState('');
 
-  const category=["Bundesliga", "LaLiga", "Premier League"];
+  const category = ["Bundesliga", "LaLiga", "Premier League"];
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -53,50 +54,65 @@ const App = () => {
   return (
     <C.Container>
       <C.Area>
-        <C.Header> Galeria de Produtos BoxxShop </C.Header>
+        <C.Header>Galeria de Produtos BoxxShop</C.Header>
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
-          <input type="file" name="image"/>
-          <input type="text" name="fileName" placeholder='Nome'/>
-          <input type="text" name="description" placeholder='Descrição'/>
+          <input type="file" name="image" />
+          <input type="text" name="fileName" placeholder='Nome' />
+          <input type="text" name="description" placeholder='Descrição' />
           <select name="category">
-          {category.map(option => (
-            <option key={option} value={option}>{option}</option>
-          ))}
+            {category.map(option => (
+              <option key={option} value={option}>{option}</option>
+            ))}
           </select>
-          <input type="submit" value="Enviar"/>
+          <input type="submit" value="Enviar" />
           {uploading && "Enviando..."}
         </C.UploadForm>
 
         {/*Área de upload*/}
-        {loading &&
+        {loading && (
           <C.ScreenWarning>
             <div className='emoji'>🤚</div>
             <div>Carregando...</div>
           </C.ScreenWarning>
-        }
+        )}
 
-        {!loading && photos.length > 0 &&
-          <C.PhotoList>
-            {photos.map((item, index) => (
-              <PhotoItem
-                key={index}
-                url={item.url}
-                name={item.name}
-                description={item.description}
-                category={item.category}
-                onDelete={handleDeleteClick}
-              ></PhotoItem>
-            ))}
-          </C.PhotoList>
-        }
+        {!loading && photos.length > 0 && (
+          <>
+            <input
+              type="text"
+              value={filter}
+              placeholder="Filtrar por categoria"
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            <br />
+            <br />
 
-        {!loading && photos.length === 0 &&
+            <C.PhotoList>
+              {photos
+                .filter((item) =>
+                  item?.category.toLowerCase().includes(filter.toLowerCase())
+                )
+                .map((item, index) => (
+                  <PhotoItem
+                    key={index}
+                    url={item.url}
+                    name={item.name}
+                    description={item.description}
+                    category={item.category}
+                    onDelete={handleDeleteClick}
+                  ></PhotoItem>
+                ))}
+            </C.PhotoList>
+          </>
+        )}
+
+        {!loading && photos.length === 0 && (
           <C.ScreenWarning>
             <div className='emoji'>😡</div>
             <div>Não há produtos cadastrados.</div>
           </C.ScreenWarning>
-        }
+        )}
       </C.Area>
     </C.Container>
   );
