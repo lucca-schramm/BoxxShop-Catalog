@@ -11,6 +11,9 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
 
+    color: yellow;
+    
+
     img{
         max-width: 100%;
         display: block;
@@ -21,6 +24,10 @@ export const Container = styled.div`
             transform: scale(1.5);
         }
     }
+    span{
+        color: white;
+    }
+   
     button{
         margin-top:5px;
     }

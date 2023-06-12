@@ -2,53 +2,56 @@ import { Photo } from "../types/Photo";
 import { storage } from "../libs/firebase";
 import { ref, listAll, getDownloadURL, uploadBytes, deleteObject, updateMetadata, getMetadata } from 'firebase/storage';
 
-export const getAll= async () => {
-    let list: Photo[] = [];
+export const getAll = async () => {
+  let list: Photo[] = [];
 
-    const imagesFolder = ref(storage, "images");
-    const photoList = await listAll(imagesFolder);
+  const imagesFolder = ref(storage, "images");
+  const photoList = await listAll(imagesFolder);
 
+  for (let i in photoList.items) {
+    let photoRef = photoList.items[i];
+    let photoUrl = await getDownloadURL(photoList.items[i]);
+    let metadata = await getMetadata(photoRef);
+    let dataModificacao = metadata.updated;
+    let description = metadata.customMetadata?.description || "";
+    let category = metadata.customMetadata?.category || "";
+    let league = metadata.customMetadata?.league || "";
+    list.push({
+      name: photoList.items[i].name,
+      url: photoUrl,
+      description: description,
+      category: category,
+      league: league,
+      dataModificacao: dataModificacao,
+    });
+  }
 
-    for(let i in photoList.items){
-        let photoRef = photoList.items[i];
-        let photoUrl = await getDownloadURL(photoList.items[i]);
-        let metadata = await getMetadata(photoRef);
-        let description = metadata.customMetadata?.description || "";
-        let category = metadata.customMetadata?.category || "";
-        list.push({
-            name: photoList.items[i].name,
-            url: photoUrl,
-            description: description,
-            category: category,
-        });
-    }
+  return list;
+};
 
-    return list;
-}
+export const sentPhotos = async (file: File, fileName: string, description: string, category: string, league: string) => {
+  if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)) {
+    let newFile = ref(storage, `images/${fileName}`);
+    let upload = await uploadBytes(newFile, file);
+    let photoUrl = await getDownloadURL(upload.ref);
 
-export const sentPhotos = async (file: File, fileName: string, description: string, category: string) => {
-    if(['image/jpeg', 'image/jpg', 'image/png'].includes(file.type)){
-        let newFile = ref(storage, `images/${fileName}`);
-        let upload = await uploadBytes(newFile, file);
-        let photoUrl = await getDownloadURL(upload.ref);
+    const metadata = {
+      customMetadata: {
+        description: description,
+        category: category,
+        league: league,
+      }
+    };
 
-        const metadata = {
-            customMetadata: {
-                description: description,
-                category: category,
-            }
-        };
+    await updateMetadata(upload.ref, metadata);
 
-        await updateMetadata(upload.ref, metadata);
-
-        return { name: upload.ref.name, url: photoUrl, description: description } as Photo;
-
-    }else{
-        return new Error('Tipo de arquivo não permitido.')
-    }
-}
+    return { name: upload.ref.name, url: photoUrl, description: description, category: category, league: league } as Photo;
+  } else {
+    return new Error('Tipo de arquivo não permitido.');
+  }
+};
 
 export const deletePhoto = async (name: string) => {
-    let photoRef = ref(storage, `images/${name}`);
-    await deleteObject(photoRef);
-}
+  let photoRef = ref(storage, `images/${name}`);
+  await deleteObject(photoRef);
+};

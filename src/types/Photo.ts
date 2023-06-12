@@ -3,4 +3,6 @@ export type Photo={
     url: string;
     description: string;
     category: string;
+    league: string;
+    dataModificacao: any;
 }

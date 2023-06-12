@@ -5,19 +5,24 @@ type Props = {
     name: string;
     description: string;
     category: string;
+    league: string;
     onDelete: (name: string) => void;
 }
 
-export const PhotoItem =  ({url, name, description, category, onDelete }: Props) => {
+export const PhotoItem =  ({url, name, description, category, league, onDelete }: Props) => {
     return (
         <C.Container>
             <img src={url} alt={name}/>
-            Produto: {name}
-            <br/>
-            Descrição: { description }
-            <br />
-            Categoria: { category }
-            <button onClick={()=> onDelete(name)}> Excluir </button>
+            <div>
+                Produto:<span> { name } </span>
+                <br/>
+                Descrição:<span> { description } </span>
+                <br />
+                Categoria:<span> { category } </span>
+                <br />
+                Liga: <span> { league } </span>
+            </div>
+                <button onClick={()=> onDelete(name)}> Excluir </button>
         </C.Container>
     );
 }

@@ -9,8 +9,23 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [filter, setFilter] = useState('');
+  const [filter_league, setFilter_league] = useState('');
 
-  const category = ["Bundesliga", "LaLiga", "Premier League"];
+  const category = ["Selecione o Produto", "Calça", "Casaco","Basquete", "Calçado", "Casual", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
+  const league = ["Selecione a Liga",
+  "Brasileirão (Campeonato Brasileiro)",
+  "Bundesliga (Campeonato Alemão)",
+  "Campeonato Argentino",
+  "Campeonato Paraguaio",
+  "Eredivisie (Campeonato Holandês)",
+  "LaLiga (Campeonato Espanhol)",
+  "Liga Portugal (Campeonato Português)",
+  "Ligue 1 (Campeonato Francês)",
+  "MLS - Major League Soccer (Campeonato Americano - EUA)",
+  "Liga Saudita",
+  "Premier League (Campeonato Inglês)",
+  "Serie A (Campeonato Italiano)",
+  "NBA (Campeonato de Basquete Americano)"];
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -29,10 +44,11 @@ const App = () => {
     const fileName = formData.get('fileName') as string;
     const description = formData.get('description') as string;
     const category = formData.get('category') as string;
+    const league = formData.get('league') as string;
 
     if (file && file.size > 0) {
       setUploading(true);
-      let result = await Photos.sentPhotos(file, fileName, description, category);
+      let result = await Photos.sentPhotos(file, fileName, description, category, league);
       setUploading(false);
 
       if (result instanceof Error) {
@@ -57,15 +73,23 @@ const App = () => {
         <C.Header>Galeria de Produtos BoxxShop</C.Header>
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
-          <input type="file" name="image" />
-          <input type="text" name="fileName" placeholder='Nome' />
-          <input type="text" name="description" placeholder='Descrição' />
-          <select name="category">
-            {category.map(option => (
-              <option key={option} value={option}>{option}</option>
-            ))}
-          </select>
-          <input type="submit" value="Enviar" />
+          <div>  
+            <input type="file" name="image" />
+            <input type="text" name="fileName" placeholder='Nome' />
+            <input type="text" name="description" placeholder='Descrição' />
+            <br />
+            <select name="category">
+              {category.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+            <select name="league">
+              {league.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
+            <input type="submit" value="Enviar" />
+          </div>
           {uploading && "Enviando..."}
         </C.UploadForm>
 
@@ -79,20 +103,30 @@ const App = () => {
 
         {!loading && photos.length > 0 && (
           <>
+          <C.Filters>
             <input
-              type="text"
-              value={filter}
-              placeholder="Filtrar por categoria"
-              onChange={(e) => setFilter(e.target.value)}
-            />
-            <br />
-            <br />
+                id="category"
+                type="text"
+                value={filter}
+                placeholder="Filtrar por categoria"
+                onChange={(e) => setFilter(e.target.value)}
+              />
+              <input
+                type="text"
+                value={filter_league}
+                placeholder="Filtrar por Liga"
+                onChange={(i) => setFilter_league(i.target.value)}
+              />
+          </C.Filters>
+          <br />
+            
 
             <C.PhotoList>
               {photos
                 .filter((item) =>
-                  item?.category.toLowerCase().includes(filter.toLowerCase())
-                )
+                  item?.category.toLowerCase().includes(filter.toLowerCase()) &&
+                  item?.league.toLowerCase().includes(filter_league.toLowerCase())
+                  )
                 .map((item, index) => (
                   <PhotoItem
                     key={index}
@@ -100,6 +134,7 @@ const App = () => {
                     name={item.name}
                     description={item.description}
                     category={item.category}
+                    league={item.league}
                     onDelete={handleDeleteClick}
                   ></PhotoItem>
                 ))}

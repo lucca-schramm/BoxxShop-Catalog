@@ -10,6 +10,14 @@ export const Area = styled.div`
     margin: auto;
     max-width: 980px;
     padding: 30px 0';
+    input#category{
+        margin-right: 100px;
+    }
+    `;
+export const Filters = styled.div`
+    input[type=text]{
+        margin-right: 50px;
+    }
     `;
 
 export const Header = styled.h1`
@@ -64,5 +72,6 @@ export const UploadForm = styled.form`
         margin-left: 10px;
         border-radius: 5px;
     }
+
     }
 `;
