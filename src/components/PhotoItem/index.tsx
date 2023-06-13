@@ -22,6 +22,7 @@ export const PhotoItem =  ({url, name, description, category, league, dataModifi
                 Categoria:<span> { category } </span>
                 <br />
                 Liga: <span> { league } </span>
+                <br />
             </div>
                 <button onClick={()=> onDelete(name)}> Excluir </button>
         </C.Container>
