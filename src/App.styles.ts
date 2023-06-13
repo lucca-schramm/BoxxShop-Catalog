@@ -32,6 +32,20 @@ export const ScreenWarning = styled.div`
     .emoji{
         font-size: 50px;
         margin-bottom: 20px;
+
+        .loading-image {
+            animation: spin 1s infinite linear;
+          }
+          
+          @keyframes spin {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(540deg);
+            }
+          }
+          
     }
 `;
 
