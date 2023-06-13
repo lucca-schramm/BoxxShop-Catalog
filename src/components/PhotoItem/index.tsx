@@ -6,11 +6,12 @@ type Props = {
     description: string;
     category: string;
     league: string;
+    brand: string;
     dataModificacao: Date,
     onDelete: (name: string) => void;
 }
 
-export const PhotoItem =  ({url, name, description, category, league, dataModificacao, onDelete }: Props) => {
+export const PhotoItem =  ({url, name, description, category, league, dataModificacao, brand, onDelete }: Props) => {
     return (
         <C.Container>
             <img src={url} alt={name}/>
@@ -23,6 +24,7 @@ export const PhotoItem =  ({url, name, description, category, league, dataModifi
                 <br />
                 Liga: <span> { league } </span>
                 <br />
+                Marca: <span>{ brand }</span>
             </div>
                 <button onClick={()=> onDelete(name)}> Excluir </button>
         </C.Container>

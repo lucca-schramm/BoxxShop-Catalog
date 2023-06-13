@@ -11,7 +11,7 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const [filter_league, setFilter_league] = useState('');
 
-  const category = ["Selecione o Produto", "Calça", "Casaco","Basquete", "Calçado", "Casual", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
+  const category = ["Selecione o Produto", "Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
   const league = ["Selecione a Liga",
   "Brasileirão (Campeonato Brasileiro)",
   "Bundesliga (Campeonato Alemão)",
@@ -26,6 +26,7 @@ const App = () => {
   "Premier League (Campeonato Inglês)",
   "Serie A (Campeonato Italiano)",
   "NBA (Campeonato de Basquete Americano)"];
+  const brand = ['Adidas', 'Balenciaga', 'Diadora', 'New Balance', 'Nike', 'Puma', 'Puma', 'Topper', 'Umbro', 'Under Armour']
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -45,10 +46,11 @@ const App = () => {
     const description = formData.get('description') as string;
     const category = formData.get('category') as string;
     const league = formData.get('league') as string;
+    const brand = formData.get('brand') as string;
 
     if (file && file.size > 0) {
       setUploading(true);
-      let result = await Photos.sentPhotos(file, fileName, description, category, league);
+      let result = await Photos.sentPhotos(file, fileName, description, category, league, brand);
       setUploading(false);
 
       if (result instanceof Error) {
@@ -88,6 +90,11 @@ const App = () => {
                 <option key={option} value={option}>{option}</option>
               ))}
             </select>
+            <select name="brand">
+              {brand.map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
             <input type="submit" value="Enviar" />
           </div>
           {uploading && "Enviando..."}
@@ -96,7 +103,7 @@ const App = () => {
         {/*Área de upload*/}
         {loading && (
           <C.ScreenWarning>
-            <div className='emoji'>🤚</div>
+            <div className='emoji'><img src="/loading.png" alt="Loading..." className="loading-image" /></div>
             <div>Carregando...</div>
           </C.ScreenWarning>
         )}
@@ -135,7 +142,8 @@ const App = () => {
                     description={item.description}
                     category={item.category}
                     league={item.league}
-                    dataModificacao={item.dataModificacao}
+                    brand={item.brand}
+                    dataModificacao={item.dateModify}
                     onDelete={handleDeleteClick}
                   ></PhotoItem>
                 ))}
