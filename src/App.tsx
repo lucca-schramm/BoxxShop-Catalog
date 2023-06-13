@@ -135,6 +135,7 @@ const App = () => {
                     description={item.description}
                     category={item.category}
                     league={item.league}
+                    dataModificacao={item.dataModificacao}
                     onDelete={handleDeleteClick}
                   ></PhotoItem>
                 ))}

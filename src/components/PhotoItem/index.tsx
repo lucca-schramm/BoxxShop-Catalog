@@ -6,10 +6,11 @@ type Props = {
     description: string;
     category: string;
     league: string;
+    dataModificacao: Date,
     onDelete: (name: string) => void;
 }
 
-export const PhotoItem =  ({url, name, description, category, league, onDelete }: Props) => {
+export const PhotoItem =  ({url, name, description, category, league, dataModificacao, onDelete }: Props) => {
     return (
         <C.Container>
             <img src={url} alt={name}/>
