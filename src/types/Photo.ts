@@ -4,5 +4,6 @@ export type Photo={
     description: string;
     category: string;
     league: string;
-    dataModificacao: Date;
+    brand: string;
+    dateModify: Date;
 }
