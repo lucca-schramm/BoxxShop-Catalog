@@ -125,18 +125,7 @@ const App = () => {
           </C.Form_center>
           {uploading && "Enviando..."}
         </C.UploadForm>
-
-        {/*Área de upload*/}
-        {loading && (
-          <C.ScreenWarning>
-            <div className='emoji'><img src="/loading.png" alt="Loading..." className="loading-image" /></div>
-            <div>Carregando...</div>
-          </C.ScreenWarning>
-        )}
-
-        {!loading && photos.length > 0 && (
-          <>
-            <C.Filters>
+        <C.Filters>
               <input
                 type="text"
                 value={filterName}
@@ -158,7 +147,16 @@ const App = () => {
             </C.Filters>
             <br />
 
+        {/*Área de upload*/}
+        {loading && (
+          <C.ScreenWarning>
+            <div className='emoji'><img src="/loading.png" alt="Loading..." className="loading-image" /></div>
+            <div>Carregando...</div>
+          </C.ScreenWarning>
+        )}
 
+        {!loading && photos.length > 0 && (
+          <>
             <C.PhotoList>
               {photos
                 .filter((item) =>
