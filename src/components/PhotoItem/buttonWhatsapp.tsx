@@ -8,8 +8,6 @@ type ProductButtonProps = {
 
 const ProductButton: React.FC<ProductButtonProps> = ({ name, description, url }) => {
   const handleClick = () => {
-    const audio = new Audio("cavalo-ratinho.mp3");
-    audio.play();
     const whatsappNumber = '+5571986539026';
     const message = `Olá, gostei desse produto no catálogo e gostaria de encomendá-lo: 
     ${name}, ${description}.`;
