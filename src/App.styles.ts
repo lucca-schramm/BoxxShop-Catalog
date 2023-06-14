@@ -22,6 +22,7 @@ export const Filters = styled.div`
 
     input[type=text]{
         border-radius:10px;
+        width: 80%;
     }
     `;
 
