@@ -10,13 +10,17 @@ export const Area = styled.div`
     margin: auto;
     max-width: 980px;
     padding: 30px 0;
-    input#category{
-        margin-right: 100px;
-    }
     `;
 export const Filters = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 15px;
+    gap:35px;
+
     input[type=text]{
-        margin-right: 50px;
+        border-radius:10px;
     }
     `;
 
@@ -59,33 +63,37 @@ export const UploadForm = styled.form`
     background-color: #3D3F43;
     padding: 15px;
     border-radius: 10px;
-    margin-bottom: 30px;
-    justify-content: space-between;
+    margin-bottom: 15px;
+   `;
 
-    input[type=text]{
-        margin-left: 5px;
-        margin-right: 5px;
-        border-radius: 5px;
-    }
+export const StyledInput = styled.input`
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
+`;
 
-    input[type=submit]{
-        background-color: #111;
-        border: 0;
-        color: #FFF;
-        padding: 8px 16px;
-        font-size: 15px;
-        border-radius: 10px;
-        margin: 0 20px;
-        cursor: pointer;
+export const StyledSelect = styled.select`
+    margin-left: 10px;
+    border-radius: 5px;
+`;
+export const StyledSubmitButton = styled.input`
+    background-color: #111;
+    border: 0;
+    color: #FFF;
+    padding: 8px 16px;
+    font-size: 15px;
+    border-radius: 10px;
+    cursor: pointer;
 
-        &:hover{
-            opacity: .8;
-        }
-
-    select[name="category"] {
-        margin-left: 10px;
-        border-radius: 5px;
-    }
-
+    &:hover {
+        opacity: .8;
     }
 `;
+export const Form_center = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 15px;
+`;
+

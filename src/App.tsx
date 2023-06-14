@@ -10,22 +10,22 @@ const App = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [filter, setFilter] = useState('');
   const [filter_league, setFilter_league] = useState('');
+  const [filterName, setFilterName] = useState('');
 
-  const category = ["Selecione o Produto", "Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
-  const league = ["Selecione a Liga",
-  "Brasileirão (Campeonato Brasileiro)",
-  "Bundesliga (Campeonato Alemão)",
-  "Campeonato Argentino",
-  "Campeonato Paraguaio",
-  "Eredivisie (Campeonato Holandês)",
-  "LaLiga (Campeonato Espanhol)",
-  "Liga Portugal (Campeonato Português)",
-  "Ligue 1 (Campeonato Francês)",
-  "MLS - Major League Soccer (Campeonato Americano - EUA)",
-  "Liga Saudita",
-  "Premier League (Campeonato Inglês)",
-  "Serie A (Campeonato Italiano)",
-  "NBA (Campeonato de Basquete Americano)"];
+  const category = ["Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
+  const league = ["Brasileirão (Campeonato Brasileiro)",
+    "Bundesliga (Campeonato Alemão)",
+    "Campeonato Argentino",
+    "Campeonato Paraguaio",
+    "Eredivisie (Campeonato Holandês)",
+    "LaLiga (Campeonato Espanhol)",
+    "Liga Portugal (Campeonato Português)",
+    "Ligue 1 (Campeonato Francês)",
+    "MLS - Major League Soccer (Campeonato Americano - EUA)",
+    "Liga Saudita",
+    "Premier League (Campeonato Inglês)",
+    "Serie A (Campeonato Italiano)",
+    "NBA (Campeonato de Basquete Americano)"];
   const brand = ['Adidas', 'Balenciaga', 'Diadora', 'New Balance', 'Nike', 'Puma', 'Puma', 'Topper', 'Umbro', 'Under Armour']
 
   useEffect(() => {
@@ -75,28 +75,34 @@ const App = () => {
         <C.Header>Galeria de Produtos BoxxShop</C.Header>
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
-          <div>  
-            <input type="file" name="image" />
-            <input type="text" name="fileName" placeholder='Nome' />
-            <input type="text" name="description" placeholder='Descrição' />
-            <br />
-            <select name="category">
+          <C.Form_center>
+            <C.StyledInput type="file" name="image" />
+            <C.StyledInput type="text" name="fileName" placeholder='Insira o nome do produto e o time' />
+            <C.StyledInput type="text" name="description" placeholder='Descreva o produto' />
+          </C.Form_center>
+          <C.Form_center>
+            <C.StyledSelect name="category">
+            <option disabled selected>Selecione a Categoria</option>
               {category.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
-            </select>
-            <select name="league">
+            </C.StyledSelect>
+            <C.StyledSelect className="league">
+              <option disabled selected>Selecione a Liga</option>
               {league.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
-            </select>
-            <select name="brand">
+            </C.StyledSelect>
+            <C.StyledSelect className="brand">
+            <option disabled selected>Selecione a Marca</option>
               {brand.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
-            </select>
-            <input type="submit" value="Enviar" />
-          </div>
+            </C.StyledSelect>
+          </C.Form_center>
+          <C.Form_center>
+            <C.StyledSubmitButton type="submit" value="Enviar" />
+          </C.Form_center>
           {uploading && "Enviando..."}
         </C.UploadForm>
 
@@ -110,12 +116,17 @@ const App = () => {
 
         {!loading && photos.length > 0 && (
           <>
-          <C.Filters>
-            <input
-                id="category"
+            <C.Filters>
+              <input
+                type="text"
+                value={filterName}
+                placeholder="Filtrar por Nome"
+                onChange={(i) => setFilterName(i.target.value)}
+              />
+              <input
                 type="text"
                 value={filter}
-                placeholder="Filtrar por categoria"
+                placeholder="Filtrar por Categoria"
                 onChange={(e) => setFilter(e.target.value)}
               />
               <input
@@ -124,16 +135,17 @@ const App = () => {
                 placeholder="Filtrar por Liga"
                 onChange={(i) => setFilter_league(i.target.value)}
               />
-          </C.Filters>
-          <br />
-            
+            </C.Filters>
+            <br />
+
 
             <C.PhotoList>
               {photos
                 .filter((item) =>
+                  item?.name.toLowerCase().includes(filterName.toLowerCase())&&
                   item?.category.toLowerCase().includes(filter.toLowerCase()) &&
                   item?.league.toLowerCase().includes(filter_league.toLowerCase())
-                  )
+                )
                 .map((item, index) => (
                   <PhotoItem
                     key={index}
