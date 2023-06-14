@@ -87,13 +87,13 @@ const App = () => {
                 <option key={option} value={option}>{option}</option>
               ))}
             </C.StyledSelect>
-            <C.StyledSelect className="league">
+            <C.StyledSelect name="league">
               <option disabled selected>Selecione a Liga</option>
               {league.map(option => (
                 <option key={option} value={option}>{option}</option>
               ))}
             </C.StyledSelect>
-            <C.StyledSelect className="brand">
+            <C.StyledSelect name="brand">
             <option disabled selected>Selecione a Marca</option>
               {brand.map(option => (
                 <option key={option} value={option}>{option}</option>
