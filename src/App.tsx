@@ -13,20 +13,20 @@ const App = () => {
   const [filterName, setFilterName] = useState('');
 
   const category = ["Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
-  const league = ["Brasileirão (Campeonato Brasileiro)",
-    "Bundesliga (Campeonato Alemão)",
-    "Campeonato Argentino",
-    "Campeonato Paraguaio",
-    "Eredivisie (Campeonato Holandês)",
-    "LaLiga (Campeonato Espanhol)",
-    "Liga Portugal (Campeonato Português)",
-    "Ligue 1 (Campeonato Francês)",
-    "MLS - Major League Soccer (Campeonato Americano - EUA)",
+  const league = ["Brasileirão (Brasileiro)",
+    "Bundesliga (Alemão)",
+    "Argentino",
+    "Paraguaio",
+    "Eredivisie (Holandês)",
+    "LaLiga (Espanhol)",
+    "Liga Portugal (Português)",
+    "Ligue 1 (Francês)",
+    "MLS - Major League Soccer (Americano - EUA)",
     "Liga Saudita",
-    "Premier League (Campeonato Inglês)",
-    "Serie A (Campeonato Italiano)",
-    "NBA (Campeonato de Basquete Americano)"];
-  const brand = ['Adidas', 'Balenciaga', 'Diadora', 'New Balance', 'Nike', 'Puma', 'Puma', 'Topper', 'Umbro', 'Under Armour']
+    "Premier League (Inglês)",
+    "Serie A (Italiano)",
+    "NBA (Basquete Americano)"];
+  const brand = ['Adidas', 'Balenciaga', 'Diadora', 'New Balance', 'Nike', 'Puma', 'Topper', 'Umbro', 'Under Armour']
 
   useEffect(() => {
     const getPhotos = async () => {
