@@ -25,6 +25,8 @@ export const PhotoItem =  ({url, name, description, category, league, dataModifi
                 Liga: <span> { league } </span>
                 <br />
                 Marca: <span>{ brand }</span>
+                <br />
+                Adicionado: <span> { dataModificacao?.getDate()+'/'+dataModificacao?.getMonth()+'/'+dataModificacao?.getFullYear() }</span>
             </div>
                 <button onClick={()=> onDelete(name)}> Excluir </button>
         </C.Container>
