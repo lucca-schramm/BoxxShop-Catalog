@@ -9,7 +9,8 @@ type ProductButtonProps = {
 const ProductButton: React.FC<ProductButtonProps> = ({ name, description, url }) => {
   const handleClick = () => {
     const whatsappNumber = '+5571986539026';
-    const message = `Olá, vim do catálogo e gostaria de encomendar o produto ${name}, ${description}.`;
+    const message = `Olá, gostei desse produto no catálogo e gostaria de encomendá-lo: 
+    ${name}, ${description}.`;
 
     const encodedMessage = encodeURIComponent(message);
     const encodedImageUrl = encodeURIComponent(url);
