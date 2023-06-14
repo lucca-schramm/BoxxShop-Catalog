@@ -11,6 +11,7 @@ const App = () => {
   const [filter, setFilter] = useState('');
   const [filter_league, setFilter_league] = useState('');
   const [filterName, setFilterName] = useState('');
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   const category = ["Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
   const league = ["Brasileirão (Brasileiro)",
@@ -62,6 +63,22 @@ const App = () => {
       }
     }
   }
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (typeof reader.result === 'string') {
+          setPreviewImage(reader.result);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewImage('');
+    }
+  };
 
   const handleDeleteClick = async (name: string) => {
     await Photos.deletePhoto(name);
@@ -76,7 +93,10 @@ const App = () => {
 
         <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
           <C.Form_center>
-            <C.StyledInput type="file" name="image" />
+            <C.StyledInput type="file" name="image" onChange={handleImageChange}/>
+            {previewImage && (
+              <img src={previewImage} alt="Pré-visualização da imagem" style={{ width: '200px', height: 'auto' }} />
+            )}
             <C.StyledInput type="text" name="fileName" placeholder='Insira o nome do produto e o time' />
             <C.StyledInput type="text" name="description" placeholder='Descreva o produto' />
           </C.Form_center>
