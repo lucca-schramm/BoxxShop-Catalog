@@ -9,8 +9,6 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [filter, setFilter] = useState('');
-  const [filter_league, setFilter_league] = useState('');
-  const [filterName, setFilterName] = useState('');
   const [previewImage, setPreviewImage] = useState<string>('');
 
   const category = ["Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
@@ -128,21 +126,9 @@ const App = () => {
         <C.Filters>
               <input
                 type="text"
-                value={filterName}
-                placeholder="Filtrar por Nome"
-                onChange={(i) => setFilterName(i.target.value)}
-              />
-              <input
-                type="text"
                 value={filter}
-                placeholder="Filtrar por Categoria"
+                placeholder="Filtrar Produtos"
                 onChange={(e) => setFilter(e.target.value)}
-              />
-              <input
-                type="text"
-                value={filter_league}
-                placeholder="Filtrar por Liga"
-                onChange={(i) => setFilter_league(i.target.value)}
               />
             </C.Filters>
             <br />
@@ -160,9 +146,9 @@ const App = () => {
             <C.PhotoList>
               {photos
                 .filter((item) =>
-                  item?.name.toLowerCase().includes(filterName.toLowerCase())&&
-                  item?.category.toLowerCase().includes(filter.toLowerCase()) &&
-                  item?.league.toLowerCase().includes(filter_league.toLowerCase())
+                  item?.name.toLowerCase().includes(filter.toLowerCase()) ||
+                  item?.category.toLowerCase().includes(filter.toLowerCase()) ||
+                  item?.league.toLowerCase().includes(filter.toLowerCase())
                 )
                 .map((item, index) => (
                   <PhotoItem
