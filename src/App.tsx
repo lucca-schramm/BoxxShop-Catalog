@@ -1,31 +1,14 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect } from 'react';
 import * as C from './App.styles';
 import * as Photos from './services/photos';
-import { Photo } from './types/Photo';
-import { PhotoItem } from './components/PhotoItem';
+import { Photo } from './utils/types/Photo';
+import PhotoList from './components/PhotoList/PhotoList';
+import Form from './components/UploadForm/Form';
 
 const App = () => {
-  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [filter, setFilter] = useState('');
-  const [previewImage, setPreviewImage] = useState<string>('');
-
-  const category = ["Basquete", "Calça", "Casaco", "Calçado", "Casual", "Corta Vento", "Kit", "Futebol Jogador", "Futebol Torcedor", "Futebol Treino"];
-  const league = ["Brasileirão (Brasileiro)",
-    "Bundesliga (Alemão)",
-    "Argentino",
-    "Paraguaio",
-    "Eredivisie (Holandês)",
-    "LaLiga (Espanhol)",
-    "Liga Portugal (Português)",
-    "Ligue 1 (Francês)",
-    "MLS - Major League Soccer (Americano - EUA)",
-    "Liga Saudita",
-    "Premier League (Inglês)",
-    "Serie A (Italiano)",
-    "NBA (Basquete Americano)"];
-  const brand = ['Adidas', 'Balenciaga', 'Diadora', 'New Balance', 'Nike', 'Puma', 'Topper', 'Umbro', 'Under Armour']
 
   useEffect(() => {
     const getPhotos = async () => {
@@ -36,104 +19,29 @@ const App = () => {
     getPhotos();
   }, []);
 
-  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const file = formData.get('image') as File;
-    const fileName = formData.get('fileName') as string;
-    const description = formData.get('description') as string;
-    const category = formData.get('category') as string;
-    const league = formData.get('league') as string;
-    const brand = formData.get('brand') as string;
-
-    if (file && file.size > 0) {
-      setUploading(true);
-      let result = await Photos.sentPhotos(file, fileName, description, category, league, brand);
-      setUploading(false);
-
-      if (result instanceof Error) {
-        alert(`${result.name} - ${result.message}`);
-      } else {
-        let newPhotoList = [...photos];
-        newPhotoList.push(result);
-        setPhotos(newPhotoList);
-      }
-    }
-  }
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (typeof reader.result === 'string') {
-          setPreviewImage(reader.result);
-        }
-      };
-
-      reader.readAsDataURL(file);
-    } else {
-      setPreviewImage('');
-    }
-  };
-
   const handleDeleteClick = async (name: string) => {
     await Photos.deletePhoto(name);
     const updatedPhotos = photos.filter((photo) => photo.name !== name);
     setPhotos(updatedPhotos);
-  }
+  };
 
   return (
     <C.Container>
       <C.Area>
         <C.Header>Galeria de Produtos BoxxShop</C.Header>
 
-        <C.UploadForm method="POST" onSubmit={handleFormSubmit}>
-          <C.Form_center>
-            <C.StyledInput type="file" name="image" onChange={handleImageChange}/>
-            {previewImage && (
-              <img src={previewImage} alt="Pré-visualização da imagem" style={{ width: '200px', height: 'auto' }} />
-            )}
-            <C.StyledInput type="text" name="fileName" placeholder='Insira o nome do produto e o time' />
-            <C.StyledInput type="text" name="description" placeholder='Descreva o produto' />
-          </C.Form_center>
-          <C.Form_center>
-            <C.StyledSelect name="category">
-            <option disabled selected>Selecione a Categoria</option>
-              {category.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </C.StyledSelect>
-            <C.StyledSelect name="league">
-              <option disabled selected>Selecione a Liga</option>
-              {league.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </C.StyledSelect>
-            <C.StyledSelect name="brand">
-            <option disabled selected>Selecione a Marca</option>
-              {brand.map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </C.StyledSelect>
-          </C.Form_center>
-          <C.Form_center>
-            <C.StyledSubmitButton type="submit" value="Enviar" />
-          </C.Form_center>
-          {uploading && "Enviando..."}
-        </C.UploadForm>
-        <C.Filters>
-              <input
-                type="text"
-                value={filter}
-                placeholder="Filtrar Produtos"
-                onChange={(e) => setFilter(e.target.value)}
-              />
-            </C.Filters>
-            <br />
+        <Form setPhotos={setPhotos} photos={photos} />
 
-        {/*Área de upload*/}
+        <C.Filters>
+          <input
+            type="text"
+            value={filter}
+            placeholder="Filtrar Produtos"
+            onChange={(e) => setFilter(e.target.value)}
+          />
+        </C.Filters>
+        <br />
+
         {loading && (
           <C.ScreenWarning>
             <div className='emoji'><img src="/loading.png" alt="Loading..." className="loading-image" /></div>
@@ -142,29 +50,11 @@ const App = () => {
         )}
 
         {!loading && photos.length > 0 && (
-          <>
-            <C.PhotoList>
-              {photos
-                .filter((item) =>
-                  item?.name.toLowerCase().includes(filter.toLowerCase()) ||
-                  item?.category.toLowerCase().includes(filter.toLowerCase()) ||
-                  item?.league.toLowerCase().includes(filter.toLowerCase())
-                )
-                .map((item, index) => (
-                  <PhotoItem
-                    key={index}
-                    url={item.url}
-                    name={item.name}
-                    description={item.description}
-                    category={item.category}
-                    league={item.league}
-                    brand={item.brand}
-                    dataModificacao={item.dateModify}
-                    onDelete={handleDeleteClick}
-                  ></PhotoItem>
-                ))}
-            </C.PhotoList>
-          </>
+          <PhotoList
+            photos={photos}
+            filter={filter}
+            handleDeleteClick={handleDeleteClick}
+          />
         )}
 
         {!loading && photos.length === 0 && (
