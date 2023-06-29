@@ -11,6 +11,8 @@ export const Container = styled.div`
     align-items: center;
     justify-content: center;
 
+    font-size: 14px;
+
     color: yellow;
     
 
