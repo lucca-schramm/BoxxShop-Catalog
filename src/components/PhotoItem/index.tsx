@@ -1,5 +1,4 @@
 import * as C from './styles';
-import React from 'react';
 import ProductButton from './buttonWhatsapp';
 
 type Props = {
@@ -23,6 +22,12 @@ export const PhotoItem = ({
   brand,
   onDelete
 }: Props) => {
+  const handleDelete = () => {
+    if (window.confirm("Tem certeza que deseja excluir " + name +' '+ description+ ' ?')) {
+      onDelete(name);
+    }
+  };
+
   return (
     <C.Container>
       <img src={url} alt={name} />
@@ -46,7 +51,7 @@ export const PhotoItem = ({
             dataModificacao?.getFullYear()}
         </span>
       </div>
-      <button onClick={()=> onDelete(name)}>Excluir</button>
+      <button onClick={handleDelete}>Excluir</button>
       <ProductButton name={name} description={description} url={url} />
     </C.Container>
   );
