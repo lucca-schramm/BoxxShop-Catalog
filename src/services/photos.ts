@@ -1,4 +1,4 @@
-import { Photo } from "../types/Photo";
+import { Photo } from "../utils/types/Photo";
 import { storage } from "../libs/firebase";
 import { ref, listAll, getDownloadURL, uploadBytes, deleteObject, updateMetadata, getMetadata } from 'firebase/storage';
 
@@ -92,4 +92,32 @@ export const sentPhotos = async (file: File, fileName: string, description: stri
 export const deletePhoto = async (name: string): Promise<void> => {
   const photoRef = ref(storage, `images/${name}`);
   await deleteObject(photoRef);
+};
+
+type EditPhotoError = {
+  message: string;
+};
+
+export const editPhoto = async (
+  editedPhoto: Photo
+): Promise<Photo | EditPhotoError> => {
+  try {
+    const photoRef = ref(storage, `images/${editedPhoto.name}`);
+    const metadata = {
+      customMetadata: {
+        description: editedPhoto.description,
+        category: editedPhoto.category,
+        league: editedPhoto.league,
+        brand: editedPhoto.brand,
+      },
+    };
+
+    await updateMetadata(photoRef, metadata);
+
+    return editedPhoto;
+  } catch (error) {
+    const errorMessage = 'Erro ao editar a foto.';
+    const editPhotoError: EditPhotoError = { message: errorMessage };
+    return editPhotoError;
+  }
 };
