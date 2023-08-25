@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+# Galeria de Produtos - Documentação
+Este projeto é uma aplicação web que permite aos usuários visualizar, adicionar, editar e excluir fotos de produtos. Ele utiliza a biblioteca React para criar uma interface de usuário interativa e o Firebase para armazenar as imagens e os metadados relacionados.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Componentes Principais
+App.tsx
+Este é o componente principal da aplicação, responsável por gerenciar o estado geral da galeria de produtos e renderizar outros componentes, como PhotoList e Form. Principais características:
 
-## Available Scripts
+Carrega e exibe as fotos iniciais ao montar o componente.
+Manipula a exclusão de fotos.
+Permite filtrar as fotos por nome, descrição, categoria e liga.
+Renderiza componentes diferentes com base no estado, incluindo indicador de carregamento e mensagens quando não há fotos.
 
-In the project directory, you can run:
+EditModal.tsx
+Este componente permite editar informações de uma foto. Ele é exibido dentro do componente PhotoItem quando o botão "Editar" é clicado. Principais características:
 
-### `npm start`
+Mantém um estado local para rastrear informações da foto sendo editada.
+Ao clicar em "Salvar", atualiza as informações da foto e envia para o servidor.
+Renderiza um modal de edição somente quando ativado.
+PhotoItem.tsx
+Este componente exibe os detalhes de uma foto individual na galeria. Ele também permite excluir e editar fotos. Principais características:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Controla o estado local para determinar se o modal de edição está aberto.
+Define funções para lidar com cliques nos botões de exclusão e edição.
+Renderiza o modal de edição quando necessário.
+PhotoList.tsx
+Este componente renderiza a lista de fotos, aplicando o filtro de pesquisa e passando as funções de exclusão para os itens individuais PhotoItem. Principais características:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Aplica o filtro de pesquisa às fotos com base nas propriedades da foto.
+Mapeia e renderiza os itens individuais da galeria.
 
-### `npm test`
+Form.tsx
+Este componente é responsável pelo formulário de upload de fotos. Ele aceita informações do usuário, como nome, descrição, categoria e outras propriedades, e as envia para o servidor para upload. Principais características:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Mantém um estado local para controlar o estado do upload e a pré-visualização da imagem.
+Manipula o envio do formulário e o upload da imagem para o servidor.
+Mostra uma pré-visualização da imagem selecionada.
+Utilização do Firebase
+O aplicativo utiliza o Firebase para armazenar e recuperar imagens e metadados associados. Os seguintes arquivos são relevantes para essa integração:
 
-### `npm run build`
+firebase.js
+Este arquivo configura a conexão com o Firebase, permitindo o uso de serviços de armazenamento.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+services/photos.js
+Este arquivo contém funções para interagir com o serviço de fotos no Firebase:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+getAll: Recupera todas as fotos da galeria com seus metadados.
+getFilteredPhotos: Recupera fotos filtradas com base em critérios de pesquisa.
+sentPhotos: Faz o upload de uma nova foto para o Firebase.
+deletePhoto: Exclui uma foto do Firebase.
+editPhoto: Edita os metadados de uma foto existente no Firebase.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Como Executar o Projeto
+Clone o repositório para o seu ambiente local.
+Instale as dependências utilizando o comando npm install.
+Inicie o servidor de desenvolvimento com npm start.
+Acesse o projeto no navegador em http://localhost:3000.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Aviso
+Este projeto foi criado para fins educacionais e práticos. Certifique-se de ter compreendido as implicações do uso do Firebase e outras tecnologias antes de implementar em um ambiente de produção.
